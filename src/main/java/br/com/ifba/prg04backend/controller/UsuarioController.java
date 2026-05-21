@@ -29,13 +29,14 @@ public class UsuarioController {
     }
 
     @GetMapping// Endpoint para listar usuarios
-    public ResponseEntity<List<Usuario>> ListarTodos(){
+    public ResponseEntity<List<Usuario>> ListarTodos() {
 
-        return ResponseEntity.ok(usuarioService.ListarTodos());
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.ListarTodos());
+
     }
 
     @GetMapping("/{id}") // Endpoint para buscar por id
-    public ResponseEntity<Usuario> BuscarPorID(@PathVariable Long id){
+    public ResponseEntity<Usuario> BuscarPorID(@PathVariable Long id) {
 
         Optional<Usuario> usuario = usuarioService.BuscarPorID(id);
 
@@ -43,7 +44,7 @@ public class UsuarioController {
 
     }
 
-    @GetMapping("/{id}") //Deletar por id
+    @DeleteMapping("/{id}") //Deletar por id
     public ResponseEntity<Void> Deletar(@PathVariable Long id) {
 
         usuarioService.Deletar(id);

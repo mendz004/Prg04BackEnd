@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UsuarioIService {
 
     private final UsuarioRepository usuarioRepository;
 
@@ -38,7 +38,8 @@ public class UsuarioService {
         }
 
     }
-//Metodo Listar
+
+    //Metodo Listar
     public List<Usuario> ListarTodos() {
 
         return usuarioRepository.findAll();
@@ -49,8 +50,9 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
 
     }
-//Metodo Deletar
-    public Boolean Deletar(long id) {
+
+    //Metodo Deletar
+    public void Deletar(long id) {
 
 
         try {
@@ -59,10 +61,10 @@ public class UsuarioService {
             }
 
             usuarioRepository.deleteById(id);
-            return true;
+
 
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("Erro ao deletar usuário. " + e.getMessage());
 
         }
 
