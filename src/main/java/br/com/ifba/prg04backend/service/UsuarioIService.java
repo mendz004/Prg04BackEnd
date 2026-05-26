@@ -11,7 +11,7 @@ public interface UsuarioIService {
 
      List<Usuario> findAll();
 
-     Optional<Usuario> findById(Long id);
+     Usuario findById(Long id);
 
      void delete(long id);
 

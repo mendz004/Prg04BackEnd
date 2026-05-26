@@ -19,14 +19,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Value( value = "${server.erro.inclue-exception:false}")
     private boolean printStackTrace;
 
+    // Método responsável por tratar exceções do tipo BusinessException
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(final BusinessException businessException, final WebRequest request) {
 
+        // Obtém a mensagem da exceção
         final String menssageErro = businessException.getMessage();
 
+        // Metodo responsável por montar o objeto de resposta de erro da API
         return construirMensagemDeErro(businessException, menssageErro, HttpStatus.BAD_REQUEST, request);
     }
 
+    // Metodo responsável por montar o objeto de resposta de erro da API
     public ResponseEntity<Object> construirMensagemDeErro(Exception exception, String message, HttpStatus httpStatus, WebRequest request) {
 
         ApiError apiError = new ApiError();

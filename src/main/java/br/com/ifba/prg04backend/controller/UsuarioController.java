@@ -48,9 +48,10 @@ public class UsuarioController {
     @GetMapping("/{id}") // Endpoint para buscar por id
     public ResponseEntity<Usuario> findById(@PathVariable Long id) {
 
-        Optional<Usuario> usuario = usuarioService.findById(id);
+        Usuario usuario = usuarioService.findById(id);
 
-        return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(usuario);
+
 
     }
 

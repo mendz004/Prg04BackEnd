@@ -22,7 +22,12 @@ public class UsuarioService implements UsuarioIService {
     //Metodo Listar
     public Usuario save(Usuario usuario) {
 
-        return usuarioRepository.save(usuario);
+        boolean emailExistente = usuarioRepository.existsByEmail(usuario.getEmail());
+
+        if (emailExistente) {
+            throw new BusinessException("Email já Cadastrado");
+        } else
+            return usuarioRepository.save(usuario);
 
     }
 
@@ -32,9 +37,9 @@ public class UsuarioService implements UsuarioIService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> findById(Long id) {
+    public Usuario findById(Long id) {
 
-        return usuarioRepository.findById(id);
+        return usuarioRepository.findById(id).orElseThrow( () -> new BusinessException("Usuario nao encontrado"));
 
     }
 
