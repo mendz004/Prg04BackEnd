@@ -1,11 +1,13 @@
 package br.com.ifba.prg04backend.controller;
 
+import br.com.ifba.prg04backend.dto.UsuarioGetResponseDto;
+import br.com.ifba.prg04backend.dto.UsuarioPostRequestDto;
+import br.com.ifba.prg04backend.infrastructure.mapper.ObjectMapperUtil;
 import br.com.ifba.prg04backend.service.UsuarioService;
 import br.com.ifba.prg04backend.model.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -14,49 +16,57 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+   private final ObjectMapperUtil objectMapperUtil;
 
-    public UsuarioController(UsuarioService usuarioService) {
+
+    public UsuarioController(UsuarioService usuarioService, ObjectMapperUtil objectMapperUtil) {
         this.usuarioService = usuarioService;
-
+        this.objectMapperUtil = objectMapperUtil;
     }
 
     @PostMapping // Endpoint para criar usuário
-    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioGetResponseDto> save(@RequestBody UsuarioPostRequestDto usuarioPostRequestDto) {
 
-        Usuario usuarioSave = usuarioService.criar(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSave);
+        Usuario usuarioSave = usuarioService.save(objectMapperUtil
+                .map(usuarioPostRequestDto, Usuario.class));
+
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(objectMapperUtil.map(usuarioSave, UsuarioGetResponseDto.class));
 
     }
 
     @GetMapping// Endpoint para listar usuarios
-    public ResponseEntity<List<Usuario>> ListarTodos() {
+    public ResponseEntity<List<UsuarioGetResponseDto>> findAll() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.ListarTodos());
+       return ResponseEntity.status(HttpStatus.OK).body(objectMapperUtil.mapAll
+               (this.usuarioService.findAll(),
+               UsuarioGetResponseDto.class));
 
     }
 
     @GetMapping("/{id}") // Endpoint para buscar por id
-    public ResponseEntity<Usuario> BuscarPorID(@PathVariable Long id) {
+    public ResponseEntity<Usuario> findById(@PathVariable Long id) {
 
-        Optional<Usuario> usuario = usuarioService.BuscarPorID(id);
+        Optional<Usuario> usuario = usuarioService.findById(id);
 
         return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 
     }
 
     @DeleteMapping("/{id}") //Deletar por id
-    public ResponseEntity<Void> Deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        usuarioService.Deletar(id);
+        usuarioService.delete(id);
 
         return ResponseEntity.noContent().build();
 
     }
 
     @PutMapping("/{id}") //Altualizar por id
-    public ResponseEntity<Usuario> Altualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody Usuario usuario) {
 
-        return usuarioService.Altualizar(id, usuario)
+        return usuarioService.update(id, usuario)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 
 

@@ -1,6 +1,8 @@
 package br.com.ifba.prg04backend.service;
 
+import br.com.ifba.prg04backend.infrastructure.exception.BusinessException;
 import br.com.ifba.prg04backend.model.Usuario;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import br.com.ifba.prg04backend.repository.UsuarioRepository;
 
@@ -18,61 +20,35 @@ public class UsuarioService implements UsuarioIService {
     }
 
     //Metodo Listar
-    public Usuario criar(Usuario usuario) {
+    public Usuario save(Usuario usuario) {
 
-        try {
-            if (usuario.getName() == null) {
-                throw new RuntimeException("Nome de Usuario é Obrigátorio");
-            } else if (usuario.getEmail() == null) {
-                throw new RuntimeException("Email Obrigátorio");
-            } else if (usuario.getPassword().length() < 6) {
-                throw new RuntimeException("Senha muito Curta");
-
-            }
-            return usuarioRepository.save(usuario);
-
-        } catch (Exception e) {
-
-            throw new RuntimeException(
-                    "Erro ao criar usuário: " + e.getMessage());
-        }
+        return usuarioRepository.save(usuario);
 
     }
 
     //Metodo Listar
-    public List<Usuario> ListarTodos() {
+    public List<Usuario> findAll() {
 
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> BuscarPorID(Long id) {
+    public Optional<Usuario> findById(Long id) {
 
         return usuarioRepository.findById(id);
 
     }
 
     //Metodo Deletar
-    public void Deletar(long id) {
+    public void delete(long id) {
 
 
-        try {
-            if (usuarioRepository.existsById(id)) {
-                throw new RuntimeException("Usuario não encontrado");
-            }
-
-            usuarioRepository.deleteById(id);
-
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar usuário. " + e.getMessage());
-
-        }
+        usuarioRepository.deleteById(id);
 
 
     }
 
     //metodo Altualizar
-    public Optional<Usuario> Altualizar(Long id, Usuario usuario) {
+    public Optional<Usuario> update(Long id, Usuario usuario) {
 
         return usuarioRepository.findById(id).map(usuarioExistente -> {
             usuarioExistente.setName(usuario.getName());

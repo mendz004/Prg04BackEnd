@@ -1,5 +1,6 @@
 package br.com.ifba.prg04backend.model;
 
+import br.com.ifba.prg04backend.infrastructure.entity.PersistenceEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,11 +9,8 @@ import lombok.Setter;
 @Table(name = "usuarios") // nome da tabela
 @Getter //metodos getters
 @Setter //metodos setters
-public class Usuario {
+public class Usuario extends PersistenceEntity {
 
-    @Id //primey key
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     //define a coluna na tabela
     @Column(name = "name", nullable = false, length = 100)

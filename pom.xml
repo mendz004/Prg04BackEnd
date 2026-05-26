@@ -22,6 +22,12 @@
     </properties>
 
     <dependencies>
+    <!-- Model Mapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.4</version>
+        </dependency>
 
         <!-- WEB -->
         <dependency>
