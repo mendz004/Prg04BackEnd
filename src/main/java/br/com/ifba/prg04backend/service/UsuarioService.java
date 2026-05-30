@@ -2,7 +2,7 @@ package br.com.ifba.prg04backend.service;
 
 import br.com.ifba.prg04backend.infrastructure.exception.BusinessException;
 import br.com.ifba.prg04backend.model.Usuario;
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import br.com.ifba.prg04backend.repository.UsuarioRepository;
 
@@ -20,6 +20,7 @@ public class UsuarioService implements UsuarioIService {
     }
 
     //Metodo Listar
+    @Transactional
     public Usuario save(Usuario usuario) {
 
         boolean emailExistente = usuarioRepository.existsByEmail(usuario.getEmail());
@@ -39,17 +40,19 @@ public class UsuarioService implements UsuarioIService {
 
     public Usuario findById(Long id) {
 
-        return usuarioRepository.findById(id).orElseThrow( () -> new BusinessException("Usuario nao encontrado"));
+        return usuarioRepository.findById(id).orElseThrow(() -> new BusinessException("Usuario não encontrado"));
 
     }
 
     //Metodo Deletar
     public void delete(long id) {
 
+        if (!usuarioRepository.existsById(id)) {
+            throw new BusinessException(
+                    "Usuário não encontrado!");
+        }
 
         usuarioRepository.deleteById(id);
-
-
     }
 
     //metodo Altualizar
